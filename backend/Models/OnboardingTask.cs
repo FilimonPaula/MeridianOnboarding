@@ -10,6 +10,8 @@
 
         public DateTime DueDate { get; set; }
 
+        public bool IsCompleted { get; set; }
+
         public ICollection<EmployeeTask> EmployeeTasks { get; set; } = new List<EmployeeTask>();
     }
 }
