@@ -3,9 +3,10 @@ using backend.DTOs.EmployeeTasks;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 namespace backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeeTasksController : ControllerBase
@@ -16,7 +17,7 @@ namespace backend.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPost("assign")]
         public async Task<IActionResult> AssignTask(AssignTaskDto request)
         {
