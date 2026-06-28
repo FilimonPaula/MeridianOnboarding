@@ -3,9 +3,10 @@ using backend.DTOs.Users;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 namespace backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -20,8 +21,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetUsers()
         {
-            var users = await _context.Users
-                .Include(u => u.Team)
+            var users = await _context.Users.Include(u => u.Team)
                 .Select(u => new UserDto
                 {
                     Id = u.Id,
@@ -36,8 +36,7 @@ namespace backend.Controllers
 
             return Ok(users);
         }
-
-        [HttpGet("{id}")]
+                [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             var user = await _context.Users
@@ -62,7 +61,7 @@ namespace backend.Controllers
 
             return Ok(user);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto request)
         {
@@ -101,7 +100,7 @@ namespace backend.Controllers
 
             return Ok(response);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UpdateUserDto request)
         {
@@ -130,7 +129,7 @@ namespace backend.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "HR")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

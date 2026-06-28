@@ -3,9 +3,10 @@ using backend.DTOs.Tasks;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 namespace backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OnboardingTasksController : ControllerBase
@@ -55,7 +56,7 @@ namespace backend.Controllers
 
             return Ok(task);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPost]
         public async Task<ActionResult<TaskDto>> CreateTask(CreateTaskDto request)
         {
@@ -82,7 +83,7 @@ namespace backend.Controllers
 
             return Ok(response);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, UpdateTaskDto request)
         {
@@ -102,7 +103,7 @@ namespace backend.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "HR")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {

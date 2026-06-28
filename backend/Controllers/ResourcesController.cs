@@ -1,11 +1,15 @@
 ﻿using backend.Data;
 using backend.DTOs.Resources;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers
 {
+    [Authorize]
+
     [ApiController]
     [Route("api/[controller]")]
     public class ResourcesController : ControllerBase
@@ -54,7 +58,7 @@ namespace backend.Controllers
 
             return Ok(resource);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPost]
         public async Task<ActionResult<ResourceDto>> CreateResource(CreateResourceDto request)
         {
@@ -79,7 +83,7 @@ namespace backend.Controllers
 
             return Ok(response);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateResource(int id, UpdateResourceDto request)
         {
@@ -98,7 +102,7 @@ namespace backend.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "HR")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteResource(int id)
         {

@@ -2,9 +2,10 @@
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 namespace backend.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TeamsController : ControllerBase
@@ -36,7 +37,7 @@ namespace backend.Controllers
 
             return Ok(team);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPost]
         public async Task<ActionResult<Team>> CreateTeam(Team request)
         {
@@ -52,7 +53,7 @@ namespace backend.Controllers
 
             return Ok(team);
         }
-
+        [Authorize(Roles = "HR")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTeam(int id, Team request)
         {
@@ -70,7 +71,7 @@ namespace backend.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "HR")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam(int id)
         {

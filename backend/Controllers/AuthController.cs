@@ -10,13 +10,13 @@ namespace backend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AppDbContext _context;
-
         private readonly JwtService _jwtService;
         public AuthController(AppDbContext context, JwtService jwtService)
         {
             _context = context;
             _jwtService = jwtService;
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDto request)
@@ -40,7 +40,6 @@ namespace backend.Controllers
                 Role = user.Role,
                 FirstName = user.FirstName
             };
-
             return Ok(response);
         }
     }
