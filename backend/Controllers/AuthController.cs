@@ -2,7 +2,7 @@
 using backend.DTOs.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using backend.Services;
 namespace backend.Controllers
 {
     [ApiController]
@@ -11,9 +11,11 @@ namespace backend.Controllers
     {
         private readonly AppDbContext _context;
 
-        public AuthController(AppDbContext context)
+        private readonly JwtService _jwtService;
+        public AuthController(AppDbContext context, JwtService jwtService)
         {
             _context = context;
+            _jwtService = jwtService;
         }
 
         [HttpPost("login")]
@@ -34,7 +36,7 @@ namespace backend.Controllers
 
             var response = new LoginResponseDto
             {
-                Token = "temporary-token",
+                Token = _jwtService.GenerateToken(user),
                 Role = user.Role,
                 FirstName = user.FirstName
             };
