@@ -1,0 +1,92 @@
+.employees-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: linear-gradient(135deg, #b7d7ee, #ffd0b3);
+}
+
+.employees-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 35px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.employees-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.employees-header h1 {
+  margin: 0;
+  color: #222;
+}
+
+.employees-header p {
+  margin-top: 8px;
+  color: #555;
+}
+
+.add-employee-button {
+  padding: 13px 20px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #ff8b65, #ff6f4f);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-employee-button:hover {
+  opacity: 0.9;
+}
+
+.employees-list {
+  display: grid;
+  gap: 15px;
+}
+
+.employee-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.employee-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff6f4f;
+  font-weight: bold;
+}
+
+.employee-details h3 {
+  margin: 0;
+  color: #222;
+}
+
+.employee-details p {
+  margin: 5px 0 0;
+  color: #555;
+}
+
+.employee-status {
+  margin-left: auto;
+  padding: 7px 13px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #ff6f4f;
+  font-size: 14px;
+  font-weight: bold;
+}

@@ -14,8 +14,14 @@ function Login() {
     try {
       const data = await login(email, password);
       localStorage.setItem("token", data.token);
+      localStorage.setItem("firstName", data.firstName);
+      localStorage.setItem("role", data.role);
       setError("");
-      navigate("/dashboard");
+      if (data.role === "HR") {
+        navigate("/hr");
+      } else {
+        navigate("/employee");
+      }
     } catch (err) {
       setError(err.message);
     }
