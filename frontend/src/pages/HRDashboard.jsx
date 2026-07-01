@@ -1,9 +1,43 @@
 import { Link } from "react-router-dom";
 import "../styles/HrDashboard.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { getUsers } from "../services/userService";
+import { getTasks } from "../services/taskService";
+import { getMeetings } from "../services/meetingService";
+import { getResources } from "../services/resourceService";
+
 function HrDashboard() {
   const firstName = localStorage.getItem("firstName");
   const navigate = useNavigate();
+  const [recentEmployees, setRecentEmployees] = useState([]);
+  const [employeeCount, setEmployeeCount] = useState(0);
+  const [taskCount, setTaskCount] = useState(0);
+  const [meetingCount, setMeetingCount] = useState(0);
+  const [resourceCount, setResourceCount] = useState(0);
+
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        const users = await getUsers();
+        setRecentEmployees(users.slice(-3).reverse());
+        const tasks = await getTasks();
+        const meetings = await getMeetings();
+        const resources = await getResources();
+
+        setEmployeeCount(users.length);
+        setTaskCount(tasks.length);
+        setMeetingCount(meetings.length);
+        setResourceCount(resources.length);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    loadDashboardData();
+  }, []);
+
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
@@ -11,6 +45,7 @@ function HrDashboard() {
 
     navigate("/");
   }
+
   return (
     <div className="hr-page">
       <aside className="sidebar">
@@ -32,7 +67,9 @@ function HrDashboard() {
             <button className="logout-button" onClick={handleLogout}>
               Log out
             </button>
+
             <div className="avatar">👩🏻</div>
+
             <div>
               <strong>{firstName || "HR"}</strong>
               <p>HR</p>
@@ -46,17 +83,30 @@ function HrDashboard() {
         </section>
 
         <section className="cards">
-          <DashboardCard title="Employees" number="8" icon="👥" link="/users" />
-          <DashboardCard title="Tasks" number="15" icon="✅" link="/tasks" />
+          <DashboardCard
+            title="Employees"
+            number={employeeCount}
+            icon="👥"
+            link="/users"
+          />
+
+          <DashboardCard
+            title="Tasks"
+            number={taskCount}
+            icon="✅"
+            link="/tasks"
+          />
+
           <DashboardCard
             title="Meetings"
-            number="5"
+            number={meetingCount}
             icon="📅"
             link="/meetings"
           />
+
           <DashboardCard
             title="Resources"
-            number="12"
+            number={resourceCount}
             icon="📁"
             link="/resources"
           />
@@ -69,21 +119,14 @@ function HrDashboard() {
               <Link to="/users">View all</Link>
             </div>
 
-            <Employee
-              name="Alex Boboc"
-              role="Software Developer"
-              date="Today"
-            />
-            <Employee
-              name="Maria Chirila"
-              role="QA Engineer"
-              date="2 days ago"
-            />
-            <Employee
-              name="Daniel Tudor"
-              role="Frontend Developer"
-              date="5 days ago"
-            />
+            {recentEmployees.map((employee) => (
+              <Employee
+                key={employee.id}
+                name={`${employee.firstName} ${employee.lastName}`}
+                role={employee.jobTitle || employee.role}
+                date="Recently added"
+              />
+            ))}
           </div>
 
           <div className="list-card">
@@ -96,7 +139,9 @@ function HrDashboard() {
               title="Onboarding - Alex Boboc"
               date="May 15, 2024 · 10:00 AM"
             />
+
             <Meeting title="Team Introduction" date="May 16, 2024 · 2:00 PM" />
+
             <Meeting
               title="HR Policies Overview"
               date="May 17, 2024 · 11:00 AM"
@@ -128,10 +173,12 @@ function Employee({ name, role, date }) {
   return (
     <div className="list-row">
       <div className="initials">{initials}</div>
+
       <div>
         <strong>{name}</strong>
         <p>{role}</p>
       </div>
+
       <span>{date}</span>
     </div>
   );
@@ -141,6 +188,7 @@ function Meeting({ title, date }) {
   return (
     <div className="meeting-row">
       <div className="meeting-icon">📅</div>
+
       <div>
         <strong>{title}</strong>
         <p>{date}</p>

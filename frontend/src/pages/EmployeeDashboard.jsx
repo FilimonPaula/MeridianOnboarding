@@ -1,38 +1,39 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/EmployeeDashboard.css";
-import "../pages/Meetings.jsx";
-import "../pages/Resources.jsx";
-import "../pages/Tasks.jsx";
 import { getTasks } from "../services/taskService";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 function EmployeeDashboard() {
   const firstName = localStorage.getItem("firstName");
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
+  const [totalTasks, setTotalTasks] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState("");
   useEffect(() => {
     async function loadTasks() {
       try {
-        const tasks = await getTasks();
+        const data = await getTasks();
 
-        const totalTasks = tasks.length;
+        setTasks(data);
 
-        const completedTasks = tasks.filter((task) => task.isCompleted).length;
+        const total = data.length;
+        const completed = data.filter((task) => task.isCompleted).length;
+
+        setTotalTasks(total);
+        setCompletedTasks(completed);
 
         const percentage =
-          totalTasks === 0
-            ? 0
-            : Math.round((completedTasks / totalTasks) * 100);
+          total === 0 ? 0 : Math.round((completed / total) * 100);
 
         setProgress(percentage);
       } catch (err) {
-        console.error(err);
+        setError(err.message);
       }
     }
 
     loadTasks();
   }, []);
-
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
@@ -63,11 +64,14 @@ function EmployeeDashboard() {
             </div>
           </div>
         </div>
+        {error && <p className="error-message">{error}</p>}
 
         <div className="employee-progress-card">
           <div>
             <h2>Onboarding progress</h2>
-            <p>Keep completing your tasks step by step.</p>
+            <p>
+              {completedTasks} of {totalTasks} tasks completed.
+            </p>
           </div>
 
           <div className="progress-number">{progress}%</div>
@@ -102,22 +106,14 @@ function EmployeeDashboard() {
 
         <div className="employee-bottom-grid">
           <div className="employee-list-card">
-            <h3>Today’s plan</h3>
+            <h3>Today's tasks</h3>
 
-            <div className="employee-list-row">
-              <span>09:00</span>
-              <p>Set up your workstation</p>
-            </div>
-
-            <div className="employee-list-row">
-              <span>11:00</span>
-              <p>Meet your onboarding buddy</p>
-            </div>
-
-            <div className="employee-list-row">
-              <span>14:00</span>
-              <p>Read company resources</p>
-            </div>
+            {tasks.slice(0, 3).map((task) => (
+              <div className="employee-list-row" key={task.id}>
+                <span>📋</span>
+                <p>{task.title}</p>
+              </div>
+            ))}
           </div>
 
           <div className="employee-list-card">
