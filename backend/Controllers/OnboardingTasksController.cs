@@ -4,6 +4,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Azure.Core;
 namespace backend.Controllers
 {
     [Authorize]
@@ -46,7 +47,7 @@ namespace backend.Controllers
                     Title = t.Title,
                     Description = t.Description,
                     DueDate = t.DueDate
-                })
+        })
                 .FirstOrDefaultAsync();
 
             if (task == null)
@@ -97,6 +98,24 @@ namespace backend.Controllers
             task.Title = request.Title;
             task.Description = request.Description;
             task.DueDate = request.DueDate;
+            task.IsCompleted = request.IsCompleted;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/completion")]
+        public async Task<IActionResult> UpdateTaskStatus(int id, UpdateTaskDto request)
+        {
+            var task = await _context.OnboardingTasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+           
             task.IsCompleted = request.IsCompleted;
 
             await _context.SaveChangesAsync();
