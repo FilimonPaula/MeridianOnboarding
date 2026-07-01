@@ -18,9 +18,17 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Team>>> GetTeams()
+        public async Task<ActionResult> GetTeams()
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams
+                .Select(team => new
+                {
+                    id = team.Id,
+                    name = team.Name,
+                    description = team.Description,
+                    membersCount = team.Users.Count
+                })
+                .ToListAsync();
 
             return Ok(teams);
         }

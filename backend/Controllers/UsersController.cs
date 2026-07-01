@@ -129,6 +129,7 @@ namespace backend.Controllers
 
             return NoContent();
         }
+
         [Authorize(Roles = "HR")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
