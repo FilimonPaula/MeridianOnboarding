@@ -16,6 +16,8 @@ function Meetings() {
   const [location, setLocation] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingMeetingId, setEditingMeetingId] = useState(null);
+  const role = localStorage.getItem("role");
+  const isHR = role === "HR";
   useEffect(() => {
     async function loadMeetings() {
       try {
@@ -103,20 +105,22 @@ function Meetings() {
             <p>Schedule and manage onboarding meetings.</p>
           </div>
 
-          <button
-            className="add-employee-button"
-            type="button"
-            onClick={() => {
-              setEditingMeetingId(null);
-              setTitle("");
-              setDescription("");
-              setDate("");
-              setLocation("");
-              setShowForm(true);
-            }}
-          >
-            + Add Meeting
-          </button>
+          {isHR && (
+            <button
+              className="add-employee-button"
+              type="button"
+              onClick={() => {
+                setEditingMeetingId(null);
+                setTitle("");
+                setDescription("");
+                setDate("");
+                setLocation("");
+                setShowForm(true);
+              }}
+            >
+              + Add Meeting
+            </button>
+          )}
         </div>
 
         {error && <p className="error-message">{error}</p>}
@@ -136,26 +140,30 @@ function Meetings() {
                 {new Date(meeting.date).toLocaleDateString()}
               </span>
 
-              <button
-                className="edit-button"
-                type="button"
-                onClick={() => handleEditMeeting(meeting)}
-              >
-                ✏️
-              </button>
+              {isHR && (
+                <>
+                  <button
+                    className="edit-button"
+                    type="button"
+                    onClick={() => handleEditMeeting(meeting)}
+                  >
+                    ✏️
+                  </button>
 
-              <button
-                className="delete-button"
-                type="button"
-                onClick={() => handleDeleteMeeting(meeting.id)}
-              >
-                🗑
-              </button>
+                  <button
+                    className="delete-button"
+                    type="button"
+                    onClick={() => handleDeleteMeeting(meeting.id)}
+                  >
+                    🗑
+                  </button>
+                </>
+              )}
             </div>
           ))}
         </div>
 
-        {showForm && (
+        {showForm && isHR && (
           <div className="modal-background">
             <div className="modal">
               <div className="modal-header">

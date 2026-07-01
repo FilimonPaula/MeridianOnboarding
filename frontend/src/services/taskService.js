@@ -66,3 +66,20 @@ export async function updateTask(id, task) {
     throw new Error("Could not update task");
   }
 }
+
+export async function updateTaskCompletion(id, task) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${API_URL}/${id}/completion`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not update task status");
+  }
+}

@@ -1,0 +1,198 @@
+.employee-dashboard-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: linear-gradient(135deg, #b7d7ee, #ffd0b3);
+  font-family: Arial, sans-serif;
+}
+
+.employee-dashboard-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 35px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.employee-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.employee-dashboard-header h1 {
+  margin: 0;
+  color: #222;
+}
+
+.employee-dashboard-header p {
+  margin-top: 8px;
+  color: #555;
+}
+
+.employee-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.employee-profile p {
+  margin: 3px 0 0;
+  color: #555;
+}
+
+.employee-profile-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: white;
+  display: grid;
+  place-items: center;
+}
+
+.employee-progress-card {
+  margin-top: 35px;
+  padding: 25px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.employee-progress-card h2 {
+  margin: 0;
+}
+
+.employee-progress-card p {
+  color: #555;
+}
+
+.progress-number {
+  font-size: 38px;
+  font-weight: bold;
+  color: #ff6f4f;
+}
+
+.progress-bar {
+  height: 14px;
+  margin-top: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 65%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #ff8b65, #ff6f4f);
+}
+
+.employee-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.employee-dashboard-box {
+  padding: 28px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  color: #222;
+}
+
+.employee-dashboard-box:hover {
+  transform: translateY(-4px);
+  transition: 0.2s;
+}
+
+.box-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.employee-dashboard-box h3 {
+  margin: 0 0 8px;
+}
+
+.employee-dashboard-box p {
+  color: #555;
+}
+
+.employee-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.employee-list-card {
+  padding: 25px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.employee-list-card h3 {
+  margin-top: 0;
+}
+
+.employee-list-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 16px;
+}
+
+.employee-list-row span {
+  color: #ff6f4f;
+  font-weight: bold;
+}
+
+.employee-list-row p {
+  margin: 0;
+  color: #555;
+}
+
+.buddy-card {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.buddy-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: white;
+  color: #ff6f4f;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+.employee-top-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.logout-button {
+  padding: 14px 26px;
+  border: none;
+  border-radius: 18px;
+  background: #ff7b54;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-button:hover {
+  background: #ff6b45;
+}

@@ -4,6 +4,7 @@ import {
   createTask,
   deleteTask,
   updateTask,
+  updateTaskCompletion,
 } from "../services/taskService";
 import "../styles/Tasks.css";
 
@@ -15,7 +16,8 @@ function Tasks() {
   const [dueDate, setDueDate] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
-
+  const role = localStorage.getItem("role");
+  const isHR = role === "HR";
   useEffect(() => {
     async function loadTasks() {
       try {
@@ -86,7 +88,23 @@ function Tasks() {
       setError(err.message);
     }
   }
+  async function handleToggleTask(task) {
+    try {
+      await updateTaskCompletion(task.id, {
+        isCompleted: !task.isCompleted,
+      });
 
+      setTasks(
+        tasks.map((item) =>
+          item.id === task.id
+            ? { ...item, isCompleted: !item.isCompleted }
+            : item,
+        ),
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  }
   return (
     <div className="employees-page">
       <div className="employees-card">
@@ -96,19 +114,21 @@ function Tasks() {
             <p>Manage onboarding tasks for new employees.</p>
           </div>
 
-          <button
-            className="add-employee-button"
-            type="button"
-            onClick={() => {
-              setEditingTaskId(null);
-              setTitle("");
-              setDescription("");
-              setDueDate("");
-              setShowForm(true);
-            }}
-          >
-            + Add Task
-          </button>
+          {isHR && (
+            <button
+              className="add-employee-button"
+              type="button"
+              onClick={() => {
+                setEditingTaskId(null);
+                setTitle("");
+                setDescription("");
+                setDueDate("");
+                setShowForm(true);
+              }}
+            >
+              + Add Task
+            </button>
+          )}
         </div>
 
         {error && <p className="error-message">{error}</p>}
@@ -122,37 +142,43 @@ function Tasks() {
                 <h3>{task.title}</h3>
                 <p>{task.description}</p>
               </div>
+              {isHR ? (
+                <span className="employee-status">Task</span>
+              ) : (
+                <label className="task-check">
+                  <input
+                    type="checkbox"
+                    checked={task.isCompleted}
+                    onChange={() => handleToggleTask(task)}
+                  />
+                  Completed
+                </label>
+              )}
 
-              <span
-                className={
-                  task.isCompleted
-                    ? "employee-status completed"
-                    : "employee-status pending"
-                }
-              >
-                {task.isCompleted ? "Completed" : "Pending"}
-              </span>
+              {isHR && (
+                <>
+                  <button
+                    className="edit-button"
+                    type="button"
+                    onClick={() => handleEditTask(task)}
+                  >
+                    ✏️
+                  </button>
 
-              <button
-                className="edit-button"
-                type="button"
-                onClick={() => handleEditTask(task)}
-              >
-                ✏️
-              </button>
-
-              <button
-                className="delete-button"
-                type="button"
-                onClick={() => handleDeleteTask(task.id)}
-              >
-                🗑
-              </button>
+                  <button
+                    className="delete-button"
+                    type="button"
+                    onClick={() => handleDeleteTask(task.id)}
+                  >
+                    🗑
+                  </button>
+                </>
+              )}
             </div>
           ))}
         </div>
 
-        {showForm && (
+        {showForm && isHR && (
           <div className="modal-background">
             <div className="modal">
               <div className="modal-header">

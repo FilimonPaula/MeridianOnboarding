@@ -15,6 +15,8 @@ function Resources() {
   const [url, setUrl] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingResourceId, setEditingResourceId] = useState(null);
+  const role = localStorage.getItem("role");
+  const isHR = role === "HR";
   useEffect(() => {
     async function loadResources() {
       try {
@@ -97,19 +99,21 @@ function Resources() {
             <p>Manage useful links and documents for onboarding.</p>
           </div>
 
-          <button
-            className="add-employee-button"
-            type="button"
-            onClick={() => {
-              setEditingResourceId(null);
-              setTitle("");
-              setDescription("");
-              setUrl("");
-              setShowForm(true);
-            }}
-          >
-            + Add Resource
-          </button>
+          {isHR && (
+            <button
+              className="add-employee-button"
+              type="button"
+              onClick={() => {
+                setEditingResourceId(null);
+                setTitle("");
+                setDescription("");
+                setUrl("");
+                setShowForm(true);
+              }}
+            >
+              + Add Resource
+            </button>
+          )}
         </div>
 
         {error && <p className="error-message">{error}</p>}
@@ -130,26 +134,30 @@ function Resources() {
 
               <span className="employee-status">Link</span>
 
-              <button
-                className="edit-button"
-                type="button"
-                onClick={() => handleEditResource(resource)}
-              >
-                ✏️
-              </button>
+              {isHR && (
+                <>
+                  <button
+                    className="edit-button"
+                    type="button"
+                    onClick={() => handleEditResource(resource)}
+                  >
+                    ✏️
+                  </button>
 
-              <button
-                className="delete-button"
-                type="button"
-                onClick={() => handleDeleteResource(resource.id)}
-              >
-                🗑
-              </button>
+                  <button
+                    className="delete-button"
+                    type="button"
+                    onClick={() => handleDeleteResource(resource.id)}
+                  >
+                    🗑
+                  </button>
+                </>
+              )}
             </div>
           ))}
         </div>
 
-        {showForm && (
+        {showForm && isHR && (
           <div className="modal-background">
             <div className="modal">
               <div className="modal-header">

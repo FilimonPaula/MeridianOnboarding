@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
 import "../styles/HrDashboard.css";
+import { useNavigate } from "react-router-dom";
 function HrDashboard() {
   const firstName = localStorage.getItem("firstName");
+  const navigate = useNavigate();
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("role");
 
+    navigate("/");
+  }
   return (
     <div className="hr-page">
       <aside className="sidebar">
@@ -21,6 +29,9 @@ function HrDashboard() {
           <h1>HR Dashboard</h1>
 
           <div className="profile">
+            <button className="logout-button" onClick={handleLogout}>
+              Log out
+            </button>
             <div className="avatar">👩🏻</div>
             <div>
               <strong>{firstName || "HR"}</strong>
