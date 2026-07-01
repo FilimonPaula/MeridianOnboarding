@@ -1,76 +1,77 @@
 import { useEffect, useState } from "react";
 import {
-  getTasks,
-  createTask,
-  deleteTask,
-  updateTask,
-} from "../services/taskService";
-import "../styles/Tasks.css";
+  getResources,
+  createResource,
+  deleteResource,
+  updateResource,
+} from "../services/resourceService";
+import "../styles/Employees.css";
 
-function Tasks() {
-  const [tasks, setTasks] = useState([]);
+function Resources() {
+  const [resources, setResources] = useState([]);
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [url, setUrl] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [editingTaskId, setEditingTaskId] = useState(null);
-
+  const [editingResourceId, setEditingResourceId] = useState(null);
   useEffect(() => {
-    async function loadTasks() {
+    async function loadResources() {
       try {
-        const data = await getTasks();
-        setTasks(data);
+        const data = await getResources();
+        setResources(data);
       } catch (err) {
         setError(err.message);
       }
     }
 
-    loadTasks();
+    loadResources();
   }, []);
-  async function handleSaveTask(event) {
+
+  async function handleSaveResource(event) {
     event.preventDefault();
 
     try {
-      const taskData = {
-        title,
-        description,
-        dueDate,
-        isCompleted: false,
+      const resourceData = {
+        title: title,
+        description: description,
+        url: url,
       };
 
-      if (editingTaskId) {
-        await updateTask(editingTaskId, taskData);
+      if (editingResourceId) {
+        await updateResource(editingResourceId, resourceData);
 
-        const updatedTasks = tasks.map((task) =>
-          task.id === editingTaskId ? { ...task, ...taskData } : task,
+        const updatedResources = resources.map((resource) =>
+          resource.id === editingResourceId
+            ? { ...resource, ...resourceData }
+            : resource,
         );
 
-        setTasks(updatedTasks);
+        setResources(updatedResources);
       } else {
-        const createdTask = await createTask(taskData);
-        setTasks([...tasks, createdTask]);
+        const createdResource = await createResource(resourceData);
+        setResources([...resources, createdResource]);
       }
 
       setTitle("");
       setDescription("");
-      setDueDate("");
-      setEditingTaskId(null);
+      setUrl("");
+      setEditingResourceId(null);
       setShowForm(false);
     } catch (err) {
       setError(err.message);
     }
   }
-  function handleEditTask(task) {
-    setEditingTaskId(task.id);
-    setTitle(task.title);
-    setDescription(task.description);
-    setDueDate(task.dueDate?.slice(0, 10) || "");
+  function handleEditResource(resource) {
+    setEditingResourceId(resource.id);
+    setTitle(resource.title);
+    setDescription(resource.description);
+    setUrl(resource.url);
     setShowForm(true);
   }
-  async function handleDeleteTask(id) {
+  async function handleDeleteResource(id) {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this task?",
+      "Are you sure you want to delete this resource?",
     );
 
     if (!confirmDelete) {
@@ -78,10 +79,10 @@ function Tasks() {
     }
 
     try {
-      await deleteTask(id);
+      await deleteResource(id);
 
-      const newTasks = tasks.filter((task) => task.id !== id);
-      setTasks(newTasks);
+      const newResources = resources.filter((resource) => resource.id !== id);
+      setResources(newResources);
     } catch (err) {
       setError(err.message);
     }
@@ -92,51 +93,47 @@ function Tasks() {
       <div className="employees-card">
         <div className="employees-header">
           <div>
-            <h1>Tasks</h1>
-            <p>Manage onboarding tasks for new employees.</p>
+            <h1>Resources</h1>
+            <p>Manage useful links and documents for onboarding.</p>
           </div>
 
           <button
             className="add-employee-button"
             type="button"
             onClick={() => {
-              setEditingTaskId(null);
+              setEditingResourceId(null);
               setTitle("");
               setDescription("");
-              setDueDate("");
+              setUrl("");
               setShowForm(true);
             }}
           >
-            + Add Task
+            + Add Resource
           </button>
         </div>
 
         {error && <p className="error-message">{error}</p>}
 
         <div className="employees-list">
-          {tasks.map((task) => (
-            <div className="employee-row" key={task.id}>
-              <div className="employee-avatar">📋</div>
+          {resources.map((resource) => (
+            <div className="employee-row" key={resource.id}>
+              <div className="employee-avatar">📁</div>
 
               <div className="employee-details">
-                <h3>{task.title}</h3>
-                <p>{task.description}</p>
+                <h3>{resource.title}</h3>
+                <p>{resource.description}</p>
+
+                <a href={resource.url} target="_blank" rel="noreferrer">
+                  Open resource
+                </a>
               </div>
 
-              <span
-                className={
-                  task.isCompleted
-                    ? "employee-status completed"
-                    : "employee-status pending"
-                }
-              >
-                {task.isCompleted ? "Completed" : "Pending"}
-              </span>
+              <span className="employee-status">Link</span>
 
               <button
                 className="edit-button"
                 type="button"
-                onClick={() => handleEditTask(task)}
+                onClick={() => handleEditResource(resource)}
               >
                 ✏️
               </button>
@@ -144,7 +141,7 @@ function Tasks() {
               <button
                 className="delete-button"
                 type="button"
-                onClick={() => handleDeleteTask(task.id)}
+                onClick={() => handleDeleteResource(resource.id)}
               >
                 🗑
               </button>
@@ -156,29 +153,29 @@ function Tasks() {
           <div className="modal-background">
             <div className="modal">
               <div className="modal-header">
-                <h2>{editingTaskId ? "Edit Task" : "Add Task"}</h2>
+                <h2>{editingResourceId ? "Edit Resource" : "Add Resource"}</h2>
 
                 <button
                   className="close-button"
                   type="button"
                   onClick={() => {
                     setShowForm(false);
-                    setEditingTaskId(null);
+                    setEditingResourceId(null);
                     setTitle("");
                     setDescription("");
-                    setDueDate("");
+                    setUrl("");
                   }}
                 >
                   ×
                 </button>
               </div>
 
-              <form onSubmit={handleSaveTask} className="task-form">
+              <form onSubmit={handleSaveResource} className="task-form">
                 <label>Title</label>
                 <input
                   type="text"
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(event) => setTitle(event.target.value)}
                   required
                 />
 
@@ -186,15 +183,15 @@ function Tasks() {
                 <input
                   type="text"
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(event) => setDescription(event.target.value)}
                   required
                 />
 
-                <label>Due date</label>
+                <label>URL</label>
                 <input
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
+                  type="url"
+                  value={url}
+                  onChange={(event) => setUrl(event.target.value)}
                   required
                 />
 
@@ -204,17 +201,17 @@ function Tasks() {
                     className="cancel-button"
                     onClick={() => {
                       setShowForm(false);
-                      setEditingTaskId(null);
+                      setEditingResourceId(null);
                       setTitle("");
                       setDescription("");
-                      setDueDate("");
+                      setUrl("");
                     }}
                   >
                     Cancel
                   </button>
 
                   <button type="submit" className="save-button">
-                    {editingTaskId ? "Save Changes" : "Save Task"}
+                    {editingResourceId ? "Save Changes" : "Save Resource"}
                   </button>
                 </div>
               </form>
@@ -226,4 +223,4 @@ function Tasks() {
   );
 }
 
-export default Tasks;
+export default Resources;

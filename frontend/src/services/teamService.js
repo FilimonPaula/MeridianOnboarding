@@ -34,3 +34,33 @@ export async function createTeam(team) {
 
   return await response.json();
 }
+
+export async function deleteTeam(id) {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not delete team");
+  }
+}
+
+export async function updateTeam(id, team) {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(team),
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not update team");
+  }
+}

@@ -1,10 +1,10 @@
-const API_URL = "http://localhost:5028/api/Users";
+const API_URL = "http://localhost:5028/api/Meetings";
 
 function getToken() {
   return localStorage.getItem("token");
 }
 
-export async function getUsers() {
+export async function getMeetings() {
   const response = await fetch(API_URL, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -12,30 +12,30 @@ export async function getUsers() {
   });
 
   if (!response.ok) {
-    throw new Error(`Could not load employees. Status: ${response.status}`);
+    throw new Error("Could not load meetings");
   }
 
-  return await response.json();
+  return response.json();
 }
 
-export async function createUser(user) {
+export async function createMeeting(meeting) {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${getToken()}`,
       "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(meeting),
   });
 
   if (!response.ok) {
-    throw new Error(`Could not create user. Status: ${response.status}`);
+    throw new Error("Could not create meeting");
   }
 
-  return await response.json();
+  return response.json();
 }
 
-export async function deleteUser(id) {
+export async function deleteMeeting(id) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
     headers: {
@@ -44,11 +44,11 @@ export async function deleteUser(id) {
   });
 
   if (!response.ok) {
-    throw new Error(`Could not delete user. Status: ${response.status}`);
+    throw new Error("Could not delete meeting");
   }
 }
 
-export async function updateUser(id, user) {
+export async function updateMeeting(id, meeting) {
   const token = localStorage.getItem("token");
 
   const response = await fetch(`${API_URL}/${id}`, {
@@ -57,10 +57,10 @@ export async function updateUser(id, user) {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(meeting),
   });
 
   if (!response.ok) {
-    throw new Error("Could not update employee");
+    throw new Error("Could not update meeting");
   }
 }

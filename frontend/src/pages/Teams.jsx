@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getTeams, createTeam } from "../services/teamService";
+import {
+  getTeams,
+  createTeam,
+  deleteTeam,
+  updateTeam,
+} from "../services/teamService";
 import "../styles/Employees.css";
 
 function Teams() {
@@ -8,11 +13,12 @@ function Teams() {
   const [teamName, setTeamName] = useState("");
   const [description, setDescription] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [editingTeamId, setEditingTeamId] = useState(null);
   useEffect(() => {
     async function loadTeams() {
       try {
         const data = await getTeams();
-        console.log(data);
+
         setTeams(data);
       } catch (err) {
         setError(err.message);
@@ -21,19 +27,53 @@ function Teams() {
     loadTeams();
   }, []);
 
-  async function handleCreateTeam(event) {
+  async function handleSaveTeam(event) {
     event.preventDefault();
+
     try {
-      const newTeam = {
+      const teamData = {
         name: teamName,
         description: description,
       };
 
-      const createdTeam = await createTeam(newTeam);
-      setTeams([...teams, createdTeam]);
+      if (editingTeamId) {
+        await updateTeam(editingTeamId, teamData);
+
+        setTeams(
+          teams.map((team) =>
+            team.id === editingTeamId ? { ...team, ...teamData } : team,
+          ),
+        );
+      } else {
+        const createdTeam = await createTeam(teamData);
+
+        setTeams([...teams, createdTeam]);
+      }
+
       setTeamName("");
       setDescription("");
+      setEditingTeamId(null);
       setShowForm(false);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+  function handleEditTeam(team) {
+    setEditingTeamId(team.id);
+    setTeamName(team.name);
+    setDescription(team.description);
+    setShowForm(true);
+  }
+  async function handleDeleteTeam(id) {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this team?",
+    );
+    if (!confirm) {
+      return;
+    }
+    try {
+      await deleteTeam(id);
+      setTeams(teams.filter((team) => team.id !== id));
     } catch (err) {
       setError(err.message);
     }
@@ -50,7 +90,12 @@ function Teams() {
           <button
             className="add-employee-button"
             type="button"
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              setEditingTeamId(null);
+              setTeamName("");
+              setDescription("");
+              setShowForm(true);
+            }}
           >
             + Add Team
           </button>
@@ -69,8 +114,24 @@ function Teams() {
               </div>
 
               <span className="employee-status">
-                {team.membersCount || 0} members
+                {team.membersCount} members
               </span>
+
+              <button
+                className="edit-button"
+                type="button"
+                onClick={() => handleEditTeam(team)}
+              >
+                ✏️
+              </button>
+
+              <button
+                className="delete-button"
+                type="button"
+                onClick={() => handleDeleteTeam(team.id)}
+              >
+                🗑
+              </button>
             </div>
           ))}
         </div>
@@ -79,20 +140,24 @@ function Teams() {
           <div className="modal-background">
             <div className="modal">
               <div className="modal-header">
-                <h2>Add Team</h2>
+                <h2>{editingTeamId ? "Edit Team" : "Add Team"}</h2>
 
                 <button
                   className="close-button"
                   type="button"
-                  onClick={() => setShowForm(false)}
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditingTeamId(null);
+                    setTeamName("");
+                    setDescription("");
+                  }}
                 >
                   ×
                 </button>
               </div>
 
-              <form onSubmit={handleCreateTeam} className="task-form">
+              <form onSubmit={handleSaveTeam} className="task-form">
                 <label>Team name</label>
-
                 <input
                   type="text"
                   value={teamName}
@@ -101,7 +166,6 @@ function Teams() {
                 />
 
                 <label>Description</label>
-
                 <input
                   type="text"
                   value={description}
@@ -112,13 +176,18 @@ function Teams() {
                   <button
                     type="button"
                     className="cancel-button"
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      setShowForm(false);
+                      setEditingTeamId(null);
+                      setTeamName("");
+                      setDescription("");
+                    }}
                   >
                     Cancel
                   </button>
 
                   <button type="submit" className="save-button">
-                    Save Team
+                    {editingTeamId ? "Save Changes" : "Save Team"}
                   </button>
                 </div>
               </form>

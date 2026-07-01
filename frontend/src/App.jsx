@@ -6,6 +6,8 @@ import "./App.css";
 import Employees from "./pages/Employees";
 import Tasks from "./pages/Tasks";
 import Teams from "./pages/Teams";
+import Meetings from "./pages/Meetings";
+import Resources from "./pages/Resources";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
       <Route path="/users" element={<Employees />} />
       <Route path="/tasks" element={<Tasks />} />
       <Route path="/teams" element={<Teams />} />
+      <Route path="/meetings" element={<Meetings />} />
+      <Route path="/resources" element={<Resources />} />
     </Routes>
   );
 }
