@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/EmployeeDashboard.css";
 import { getTasks } from "../services/taskService";
 import { useEffect, useState } from "react";
+import { getUsers } from "../services/userService";
 function EmployeeDashboard() {
   const firstName = localStorage.getItem("firstName");
   const [progress, setProgress] = useState(0);
@@ -10,6 +11,28 @@ function EmployeeDashboard() {
   const [completedTasks, setCompletedTasks] = useState(0);
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
+  const [teamMembers, setTeamMembers] = useState([]);
+  useEffect(() => {
+    async function loadTeamMembers() {
+      try {
+        const users = await getUsers();
+        const currentUser = users.find((user) => user.firstName === firstName);
+
+        if (currentUser) {
+          const members = users.filter(
+            (user) => user.teamName === currentUser.teamName,
+          );
+
+          setTeamMembers(members);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadTeamMembers();
+  }, [firstName]);
+
   useEffect(() => {
     async function loadTasks() {
       try {
@@ -34,6 +57,7 @@ function EmployeeDashboard() {
 
     loadTasks();
   }, []);
+
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
@@ -117,16 +141,24 @@ function EmployeeDashboard() {
           </div>
 
           <div className="employee-list-card">
-            <h3>Your buddy</h3>
+            <h3>Your team</h3>
 
-            <div className="buddy-card">
-              <div className="buddy-avatar">AB</div>
-              <div>
-                <strong>Alex Boboc</strong>
-                <p>Software Developer</p>
-                <p>Available today in office</p>
+            {teamMembers.map((member) => (
+              <div className="buddy-card" key={member.id}>
+                <div className="buddy-avatar">
+                  {member.firstName[0]}
+                  {member.lastName[0]}
+                </div>
+
+                <div>
+                  <strong>
+                    {member.firstName} {member.lastName}
+                  </strong>
+                  <p>{member.jobTitle}</p>
+                  <p>{member.teamName}</p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
