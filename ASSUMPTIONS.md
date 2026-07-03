@@ -6,9 +6,9 @@
 
 The application is intended for two types of users:
 
-- **HR staff**, who manage the onboarding process by creating employees, assigning onboarding tasks, scheduling meetings and providing useful resources.
+- **HR staff**, who manage the onboarding process by creating employee accounts, assigning onboarding tasks, scheduling meetings, providing onboarding resources, and organizing employees into teams.
 
-- **New employees**, who use the application to track their onboarding progress, complete assigned tasks, view meetings, access company resources and see the members of their team.
+- **New employees**, who use the application to track their onboarding progress, complete assigned tasks, view meetings, access company resources, and see the members of their team.
 
 ### What does the user already know when opening the application for the first time?
 
@@ -22,25 +22,25 @@ A new employee already has an account created by HR and receives their login cre
 
 HR is responsible for:
 
-    -creating employee accounts
+- creating employee accounts
+- assigning onboarding tasks
+- creating meetings
+- providing onboarding resources
+- assigning employees to teams
 
-    -assigning tasks
-
-    -creating meetings
-
-    -uploading resources
-
-    -assigning employees to teams
-
-Employees only update their own progress by marking onboarding tasks as completed.
+Employees only update their own onboarding progress by marking assigned tasks as completed.
 
 ### When is the information added?
 
-Most information is prepared before the employee's first day. During onboarding, HR may add additional meetings, resources or tasks if necessary.
+Most onboarding information is prepared before the employee's first working day. During the onboarding process, HR may add additional meetings, resources, or tasks whenever necessary.
 
 ### What happens if information is missing or incorrect?
 
-Required fields are validated before saving. Invalid or incomplete data cannot be submitted. Existing information can be edited later by HR if corrections are needed.
+Required fields are validated before submission. If validation fails, the information cannot be saved. Existing data can later be updated by HR if corrections are needed.
+
+### How is access controlled?
+
+The application assumes that authentication is handled using JWT tokens and that users only have access to the functionality allowed by their assigned role (HR or Employee).
 
 ---
 

@@ -36,22 +36,28 @@ To keep the project achievable within the given timeframe, I intentionally left 
 
 ### Why did you choose this database structure?
 
-The database is organized around the main entities involved in the onboarding process:- Users
+The database is organized around the main entities involved in the onboarding process:
 
+- Users
 - Teams
 - Onboarding Tasks
 - Employee Tasks
 - Meetings
 - Resources
-  This structure keeps the application simple while allowing each employee to track their own onboarding progress independently.
+
+This structure keeps the application simple while allowing each employee to track their own onboarding progress independently.
+
+### Why did you choose a simple architecture?
+
+I intentionally chose a simple architecture because the project is an MVP with a relatively small domain. My goal was to focus on implementing the required functionality while keeping the code easy to understand and maintain. More advanced architectural patterns could be introduced as the application grows.
 
 ### Why did you choose these libraries/frameworks?
 
-I chose ASP.NET Core Web API for the backend because it provides a clean architecture for building REST APIs and integrates well with Entity Framework Core. React was selected for the frontend because of its component-based approach and ability to build responsive user interfaces. SQL Server was chosen because it integrates naturally with the .NET ecosystem.
+I chose ASP.NET Core Web API for the backend because it offers strong built-in support for JWT authentication and integrates seamlessly with Entity Framework Core. React was selected for the frontend because its component-based structure made it easy to reuse the same components for both HR and Employee views, while keeping role-based logic isolated. SQL Server LocalDB was used for local development since it requires no external dependencies, but I would migrate to PostgreSQL or Azure SQL for production.
 
 ### If you had more time, what would you build differently?
 
-With more time, I would implement notifications, document uploads, profile pictures, search functionality, manager accounts and a more advanced team management system.These improvements are described in the `WHAT_I_WOULD_DO_NEXT.md` document.
+With more time, I would implement notifications, document uploads, hybrid work schedules, dynamic dashboard widgets, automated testing, and deployment. These improvements are described in the `WHAT_I_WOULD_DO_NEXT.md` document.
 
 ---
 
@@ -76,3 +82,33 @@ I did not conduct formal user testing. Instead, I reviewed the application from 
 ### What changed after receiving feedback?
 
 Since I did not receive external feedback during development, no major design changes were made. However, after reviewing the user flow myself, I simplified the navigation and kept the interface focused on the most important onboarding features.
+
+---
+
+## Implementation Updates
+
+During development, some implementation details evolved compared to the initial design.
+
+### Component Reuse
+
+Initially, I planned separate pages for HR and Employee users. During implementation, I decided to reuse the same pages for meetings, resources, and tasks whenever possible. Instead of duplicating the UI, I restricted specific actions based on the user's role. HR users can create, edit, and delete data, while employees have read-only access where appropriate and can only complete their own onboarding tasks.
+
+This approach reduced code duplication, improved maintainability, and ensured a consistent user experience across both roles.
+
+---
+
+### Team Visibility
+
+The employee dashboard was updated to display the members of the employee's team instead of a static onboarding buddy. This provides employees with a better overview of the people they work with while keeping the dashboard dynamic.
+
+---
+
+### Team Statistics
+
+Initially, the Teams page displayed a static number of team members. During development, I noticed that this value became inconsistent whenever new employees were added or reassigned to a team, since it was not automatically updated. To fix this, the Teams page was updated to calculate and display the number of team members dynamically based on the employees actually assigned to each team, ensuring the displayed data always reflects the current state.
+
+---
+
+### Security Configuration
+
+For simplicity, the JWT signing key is stored in `appsettings.json` during development. In a production environment, sensitive configuration such as JWT keys and connection strings should be stored using environment variables, User Secrets, or a secure secret management solution.

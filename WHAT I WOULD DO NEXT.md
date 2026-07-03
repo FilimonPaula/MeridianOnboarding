@@ -4,36 +4,24 @@ If I had more time to continue developing this project, I would focus on improvi
 
 ## Notifications
 
-I would implement in-app and email notifications to remind employees about upcoming meetings, pending onboarding tasks and important company announcements.
+I would implement in-app and email notifications to remind employees about upcoming meetings, pending onboarding tasks, and important company announcements.
 
-## Document uploads
+## Document Uploads
 
-HR would be able to upload onboarding documents, company policies and other useful files directly into the application instead of only providing links.
+HR would be able to upload onboarding documents, company policies, and other useful files directly into the application instead of only providing external links.
 
-## Profile pictures
+## Hybrid Work Schedule
 
-Employees could upload profile pictures to make the team page more personal and help new employees recognize their colleagues.
+I would add support for weekly hybrid work schedules, allowing employees to indicate which days they will work from the office or remotely. This information could be displayed to both HR and team members, making it easier to coordinate onboarding activities and in-person collaboration.
 
-## Search functionality
+## Dynamic Dashboard Widgets
 
-I would add a search feature to quickly find employees, onboarding tasks and company resources.
+Currently, the "Upcoming Meetings" section on the HR dashboard contains placeholder data. As a next improvement, I would retrieve upcoming meetings directly from the database and display them dynamically, similar to the employee statistics and recent employees sections.
 
-## Manager accounts
+## Automated Testing
 
-Besides HR and Employee roles, I would introduce a Manager role with access to their team's onboarding progress and assigned tasks.
+I would add unit tests and integration tests to improve reliability, simplify future maintenance, and ensure that new features can be added with greater confidence.
 
-## Advanced team management
+## Deployment
 
-Instead of assigning employees to teams using a simple team field, I would create a dedicated Team entity with team leads, descriptions and member management.
-
-## Dashboard improvements
-
-I would enhance the dashboard with onboarding statistics, upcoming deadlines and personalized recommendations for new employees.
-
-## Responsive design
-
-Although the application is primarily designed for desktop use, I would further optimize the interface for tablets and mobile devices.
-
-## Testing
-
-I would add unit tests and integration tests to improve reliability and simplify future maintenance.
+After implementing the planned features and preparing the application for production, I would deploy the frontend using Vercel and the backend to a cloud hosting platform such as Azure App Service. This would make the application accessible online and simplify testing and demonstration.
